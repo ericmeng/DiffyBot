@@ -1,6 +1,13 @@
 # DiffyBot
 Automated perceptual diff testing bot.
 
+## add it to your package.JSON
+```json
+"devDependencies": {
+  "diffy-bot": "https://github.com/LoyaltyOne/DiffyBot.git#master",
+}
+```
+
 ## Config
 ```javascript
 var config = {
