@@ -24,23 +24,28 @@ var config = {
 const Diffy = require('diffy-bot');
 ```
 
-## Creating an instance to record and set the baseline
+## Creating an instance for recording the baseline
 ```javascript
 var diffy = new Diffy(config, 'record');
 ```
 
-## Creating an instance to check regression against the baseline
+## Creating an instance for regression test against the baseline
 ```javascript
 var diffy = new Diffy(config, 'regression');
 ```
 
-## Re-adjust the screen size
+## Re-adjust and standardize the screen size
 ```javascript
 //promised call
 diffy.standarizeScreenSize();
 ```
 
-## Use protractor to navigate to some page, then take screenshots of that page
+## Use protractor to navigate to some page
+```javascript
+browser.get('/#/some/place');
+```
+
+## then take screenshots of that page
 ```javascript
 //promised call that resolves to true if no regression in the page, false otherwise
 diffy.walkThroughPage(testSuiteName, testCaseName);
