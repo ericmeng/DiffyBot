@@ -16,7 +16,7 @@ function Diffy (config, mode) {
         case 'regression':
             break;
         default:
-            throw 'mode must be one of "recording" or "regression"';
+            throw 'mode must be one of "record" or "regression"';
     }
 
     var self = this;
@@ -71,7 +71,7 @@ function Diffy (config, mode) {
         var pngDiffFilePath = diffDir + '/' + testCaseName + '.png';
 
         switch (mode) {
-            case 'recording': {
+            case 'record': {
                 return mkdirp(specDir)
                     .then (function () {
                         return browser.takeScreenshot();
