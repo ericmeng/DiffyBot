@@ -15,7 +15,7 @@ function Diffy (config, mode) {
             break;
         case 'regression':
             break;
-        case default:
+        default:
             throw 'mode must be one of "recording" or "regression"';
     }
 
