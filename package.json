@@ -1,0 +1,36 @@
+{
+  "name": "diffy-bot",
+  "version": "0.0.1",
+  "description": "An automated visual diff testing tool",
+  "main": "diffy.js",
+  "private": true,
+  "author": {
+    "name": "Eric Meng",
+    "email": "emeng@loyalty.com"
+  },
+  "license": "TBD",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LoyaltyOne/DiffyBot"
+  },
+  "keywords": [
+    "diffy",
+    "image-diff",
+    "visual-diff",
+    "diff",
+    "automation",
+    "automated",
+    "testing",
+    "image",
+    "difference",
+    "compare"
+  ],
+  "dependencies": {
+    "blink-diff": "^1.0.12",
+    "fs": "0.0.2",
+    "mkdirp": "^0.5.1",
+    "protractor": "^3.3.0",
+    "shelljs": "^0.7.0",
+    "sleep-promise": "^1.0.0"
+  }
+}
