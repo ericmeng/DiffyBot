@@ -1,10 +1,11 @@
 {
   "name": "diffy-bot",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "An automated visual diff testing tool",
   "main": "diffy.js",
   "private": true,
   "author": {
+    "company": "LoyaltyOne",
     "name": "Eric Meng",
     "email": "emeng@loyalty.com"
   },
