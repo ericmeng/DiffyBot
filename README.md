@@ -38,10 +38,7 @@ var diffy = new Diffy(config, 'record');
 var diffy = new Diffy(config, 'regression');
 ```
 
-## Before doing anything, re-adjust and standardize the screen size (just do it once)
-## as protractor can only set browser size which contains other components
-## (border, titlebar, widgets, etc) and the screen size would be different
-## on different platforms.
+## Before doing anything, re-adjust and standardize the screen size (just do it once) as protractor can only set browser size which contains other components (border, titlebar, widgets, etc) and the screen size would be different on different platforms.
 ```javascript
 //promised call
 diffy.standarizeScreenSize();
