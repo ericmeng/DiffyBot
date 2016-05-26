@@ -9,7 +9,6 @@
     "name": "Eric Meng",
     "email": "emeng@loyalty.com"
   },
-  "license": "TBD",
   "repository": {
     "type": "git",
     "url": "https://github.com/LoyaltyOne/DiffyBot"
@@ -30,7 +29,6 @@
     "blink-diff": "^1.0.12",
     "fs": "0.0.2",
     "mkdirp": "^0.5.1",
-    "protractor": "^3.3.0",
     "shelljs": "^0.7.0",
     "sleep-promise": "^1.0.0"
   }

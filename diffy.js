@@ -59,11 +59,11 @@ function Diffy (config, mode) {
     this.recordScreenshotOrCheckRegression = function (testSuiteName, testCaseName) {
         return browser.waitForAngular()
         .then(function () {
-            return reallyRecordScreenshotOrCheckResression(testSuiteName, testCaseName);
+            return reallyRecordScreenshotOrCheckRegression(testSuiteName, testCaseName);
         });
     };
 
-    var reallyRecordScreenshotOrCheckResression = function (testSuiteName, testCaseName) {
+    var reallyRecordScreenshotOrCheckRegression = function (testSuiteName, testCaseName) {
         var specDir = config.specDir + testSuiteName;
         var testDir = config.testDir + testSuiteName;
         var diffDir = config.diffDir + testSuiteName;
@@ -120,7 +120,7 @@ function Diffy (config, mode) {
         var nothingFailed = true;
         function nextAction () {
             i++;
-            reallyRecordScreenshotOrCheckResression(testSuiteName, testCaseName + '_' + i)
+            reallyRecordScreenshotOrCheckRegression(testSuiteName, testCaseName + '_' + i)
             .then(function (result) {
                 nothingFailed = nothingFailed && result;
                 //try scroll down
