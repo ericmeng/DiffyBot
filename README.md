@@ -7,7 +7,7 @@ while saving all visual differences into the diffDir.
 ## Add Diffy to your package.json
 ```json
 "devDependencies": {
-  "diffy-bot": "https://github.com/LoyaltyOne/DiffyBot.git#0.1.0",
+  "diffy-bot": "https://github.com/LoyaltyOne/DiffyBot.git#0.1.2",
 }
 ```
 

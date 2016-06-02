@@ -146,15 +146,14 @@ function Diffy (config, mode) {
             });
         }
 
-        getBrowserHeight()
+        scrollToTop()
+        .then(getBrowserHeight)
         .then(function (height) {
             browserHeight = height;
             scrollByBrowserHeight = 'window.scrollBy(0, ' + height + ');';
             return;
         })
-        .then(function () {
-            return getBrowserOffset();
-        })
+        .then(getBrowserOffset)
         .then(function (newOffset) {
             yOffset = newOffset;
             return;
@@ -179,6 +178,13 @@ function mkdirp (path) {
         }
     });
     return deferred.promise;
+}
+
+// promised call
+function scrollToTop() {
+    return browser.driver.executeScript(function () {
+        return window.scrollTo(0, 0);
+    });
 }
 
 // promised call
