@@ -4,12 +4,21 @@ Run the bot in record mode to setup a baseline of screenshots.
 Later run the bot in regression mode to test against the baseline
 while saving all visual differences into the diffDir.
 
+## Prerequisite: Add your ssh-key to github account if you haven't done so
+So that you can clone any repo you have access without using password.
+Without it, `npm install` will fail.
+
+Follow this tutorial:
+https://help.github.com/articles/adding-a-new-ssh-key-to-your-github-account/
+
 ## Add Diffy to your package.json
 ```json
 "devDependencies": {
-  "diffy-bot": "https://github.com/LoyaltyOne/DiffyBot.git#0.1.2",
+  "diffy-bot": "git@github.com:LoyaltyOne/DiffyBot.git#0.1.2",
 }
 ```
+Note the protocol is not https. Git will use the ssh backend and your registered
+ssh-key for authentication.
 
 ## Import Diffy
 ```javascript
