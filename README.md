@@ -33,7 +33,8 @@ var config = {
     testDir: pdiffTestRootDir + 'test/',    //screenshots of current test
     diffDir: pdiffTestRootDir + 'diff/',    //visual differences (if any)
     screenWidth: 1024,
-    screenHeight: 768
+    screenHeight: 768,
+    ignoredClasses: ['animation', 'dynamic_content']
 };
 ```
 

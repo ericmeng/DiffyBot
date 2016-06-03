@@ -23,6 +23,7 @@ function Diffy (config, mode) {
     var targetScreenWidth = config.screenWidth;
     var targetScreenHeight = config.screenHeight;
     var delay = config.delay;
+    var ignoredClasses = config.ignoredClasses || [];
 
     this.standarizeScreenSize = function () {
 
@@ -71,6 +72,22 @@ function Diffy (config, mode) {
         var testFilePath = testDir + '/' + testCaseName + '.png';
         var pngDiffFilePath = diffDir + '/' + testCaseName + '.png';
 
+        var blockOut = [];
+        for (var i = 0; i < ignoredClasses.length; ++i) {
+            var aClass = ignoredClasses[i];
+            var ignoredItems = element.all(by.css(aClass));
+            for (var j = 0; j < ignoredItems.length; ++j) {
+                var boundingClientRect = ignoredItems[j].getBoundingClientRect();
+                var b = {
+                    x: boundingClientRect.left,
+                    width: boundingClientRect.width,
+                    y: boundingClientRect.top,
+                    height: boundingClientRect.height
+                };
+                blockOut.push(b);
+            }
+        }
+
         switch (mode) {
             case 'record': {
                 return mkdirp(specDir)
@@ -93,7 +110,7 @@ function Diffy (config, mode) {
                         return writeScreenShot(png, testFilePath);
                     })
                     .then(function () {
-                        return pdiff(specFilePath, testFilePath, pngDiffFilePath);
+                        return pdiff(specFilePath, testFilePath, pngDiffFilePath, blockOut);
                     });
             }
             default: {
@@ -224,11 +241,13 @@ function writeScreenShot(data, filename) {
 }
 
 // promised call
-function pdiff(imageFilename1, imageFilename2, pngDiffFilename) {
+function pdiff(imageFilename1, imageFilename2, pngDiffFilename, blockOut) {
     var deferred = protractor.promise.defer();
     var diff = new BlinkDiff({
         imageAPath: imageFilename1, // Use file-path
         imageBPath: imageFilename2,
+
+        blockOut: blockOut,
 
         thresholdType: BlinkDiff.THRESHOLD_PERCENT,
         threshold: 0.01, // 1% threshold
