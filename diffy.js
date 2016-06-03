@@ -23,7 +23,7 @@ function Diffy (config, mode) {
     var targetScreenWidth = config.screenWidth;
     var targetScreenHeight = config.screenHeight;
     var delay = config.delay;
-    var ignoredClasses = config.ignoredClasses || [];
+    var ignoreByCss = config.ignoreByCss || [];
 
     this.standarizeScreenSize = function () {
 
@@ -72,22 +72,6 @@ function Diffy (config, mode) {
         var testFilePath = testDir + '/' + testCaseName + '.png';
         var pngDiffFilePath = diffDir + '/' + testCaseName + '.png';
 
-        var blockOut = [];
-        for (var i = 0; i < ignoredClasses.length; ++i) {
-            var aClass = ignoredClasses[i];
-            var ignoredItems = element.all(by.css(aClass));
-            for (var j = 0; j < ignoredItems.length; ++j) {
-                var boundingClientRect = ignoredItems[j].getBoundingClientRect();
-                var b = {
-                    x: boundingClientRect.left,
-                    width: boundingClientRect.width,
-                    y: boundingClientRect.top,
-                    height: boundingClientRect.height
-                };
-                blockOut.push(b);
-            }
-        }
-
         switch (mode) {
             case 'record': {
                 return mkdirp(specDir)
@@ -109,7 +93,8 @@ function Diffy (config, mode) {
                     .then(function (png) {
                         return writeScreenShot(png, testFilePath);
                     })
-                    .then(function () {
+                    .then(findBlockoutByClasses)
+                    .then(function (blockOut) {
                         return pdiff(specFilePath, testFilePath, pngDiffFilePath, blockOut);
                     });
             }
@@ -181,6 +166,43 @@ function Diffy (config, mode) {
 
         return deferred.promise;
     };
+
+    function findBlockoutByClasses() {
+        var deferred = protractor.promise.defer();
+        var blockOut = [];
+        var numClassesLeft = ignoreByCss.length;
+        for (var i = 0; i < ignoreByCss.length; ++i) {
+            var css = ignoreByCss[i];
+            element.all(by.css(css))
+            .then(findBlockoutByElements)
+            .then(function(list) {
+                blockOut = blockOut.concat(list);
+                if (--numClassesLeft === 0) {
+                    deferred.fulfill(blockOut);
+                }
+            });
+        }
+        return deferred.promise;
+    }
+
+    function findBlockoutByElements(elements) {
+        var blockOut = [];
+        console.log(123);
+        console.log(elements);
+        console.log(456);
+        for (var j = 0; j < elements.count(); ++j) {
+            var boundingClientRect = elements.get(j).getBoundingClientRect();
+            var b = {
+                x: boundingClientRect.left,
+                width: boundingClientRect.width,
+                y: boundingClientRect.top,
+                height: boundingClientRect.height
+            };
+            blockOut.push(b);
+        }
+        console.log(blockOut);
+        return blockOut;
+    }
 
 }
 
