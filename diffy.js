@@ -170,6 +170,9 @@ function Diffy (config, mode) {
     function findBlockoutByClasses() {
         var deferred = protractor.promise.defer();
         var blockOut = [];
+        if (ignoreByCss.length === 0) {
+            deferred.fulfill(blockOut);
+        }
         var numClassesLeft = ignoreByCss.length;
         for (var i = 0; i < ignoreByCss.length; ++i) {
             var css = ignoreByCss[i];
@@ -186,22 +189,28 @@ function Diffy (config, mode) {
     }
 
     function findBlockoutByElements(elements) {
+        var deferred = protractor.promise.defer();
         var blockOut = [];
-        console.log(123);
-        console.log(elements);
-        console.log(456);
-        for (var j = 0; j < elements.count(); ++j) {
-            var boundingClientRect = elements.get(j).getBoundingClientRect();
-            var b = {
-                x: boundingClientRect.left,
-                width: boundingClientRect.width,
-                y: boundingClientRect.top,
-                height: boundingClientRect.height
-            };
-            blockOut.push(b);
+        var jobsLeft = elements.length;
+
+        for (var j = 0; j < elements.length; ++j) {
+          browser.executeScript("return arguments[0].getBoundingClientRect();", elements[j].getWebElement())
+          .then(function (boundingClientRect) {
+              console.log(boundingClientRect);
+              var b = {
+                  x: boundingClientRect.left,
+                  width: boundingClientRect.width,
+                  y: boundingClientRect.top,
+                  height: boundingClientRect.height
+              };
+              blockOut.push(b);
+              jobsLeft--;
+              if (jobsLeft === 0) {
+                deferred.fulfill(blockOut);
+              }
+          });
         }
-        console.log(blockOut);
-        return blockOut;
+        return deferred.promise;
     }
 
 }
