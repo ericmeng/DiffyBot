@@ -191,8 +191,11 @@ function Diffy (config, mode) {
     function findBlockoutByElements(elements) {
         var deferred = protractor.promise.defer();
         var blockOut = [];
-        var jobsLeft = elements.length;
 
+        if (elements.length === 0) {
+            deferred.fulfill(blockOut);
+        }
+        var jobsLeft = elements.length;
         for (var j = 0; j < elements.length; ++j) {
           browser.executeScript("return arguments[0].getBoundingClientRect();", elements[j].getWebElement())
           .then(function (boundingClientRect) {
@@ -206,7 +209,7 @@ function Diffy (config, mode) {
               blockOut.push(b);
               jobsLeft--;
               if (jobsLeft === 0) {
-                deferred.fulfill(blockOut);
+                  deferred.fulfill(blockOut);
               }
           });
         }
