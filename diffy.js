@@ -6,6 +6,7 @@ var fs = require('fs');
 var shell = require('shelljs');
 var BlinkDiff = require('blink-diff');
 var sleep = require('sleep-promise');
+var sharp = require('sharp');
 
 // constructor
 function Diffy (config, mode) {
@@ -79,7 +80,7 @@ function Diffy (config, mode) {
                         return browser.takeScreenshot();
                     })
                     .then(function (png) {
-                        return writeScreenShot(png, specFilePath);
+                        return writeScreenShot(png, specFilePath, targetScreenWidth, targetScreenHeight);
                     });
             }
             case 'regression': {
@@ -91,7 +92,7 @@ function Diffy (config, mode) {
                         return browser.takeScreenshot();
                     })
                     .then(function (png) {
-                        return writeScreenShot(png, testFilePath);
+                        return writeScreenShot(png, testFilePath, targetScreenWidth, targetScreenHeight);
                     })
                     .then(findBlockoutByClasses)
                     .then(function (blockOut) {
@@ -260,17 +261,22 @@ function getBrowserOffset () {
 }
 
 // promised call
-function writeScreenShot(data, filename) {
+function writeScreenShot(data, filename, width, height) {
     var deferred = protractor.promise.defer();
     var stream = fs.createWriteStream(filename);
-    stream.write(new Buffer(data, 'base64'));
-    stream.end();
-    stream.on('err', function () {
-        deferred.reject();
+    var buffer = new Buffer(data, 'base64');
+
+    sharp(buffer)
+    .resize(width, height)
+    .toFile(filename, (err, info) => {
+        if (err) {
+            console.log(err);
+            deferred.fulfill(false);
+        } else {
+            deferred.fulfill(true);
+        }
     });
-    stream.on('close', function () {
-        deferred.fulfill(true);
-    });
+
     return deferred.promise;
 }
 
