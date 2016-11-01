@@ -313,9 +313,9 @@ function readJsonSpec(filename) {
     var deferred = protractor.promise.defer();
     jsonfile.readFile(filename, function(err, obj) {
         if (err) {
-            deferred.fulfill(false);
+            deferred.fulfill(null);
         } else {
-            deferred.fulfill(true);
+            deferred.fulfill(obj);
         }
     })
     return deferred.promise;
