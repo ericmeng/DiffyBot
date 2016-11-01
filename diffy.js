@@ -297,9 +297,9 @@ function writeScreenShot(data, filename, width, height) {
 }
 
 // promised call
-function writeJsonSpec() {
+function writeJsonSpec(filename, obj) {
     var deferred = protractor.promise.defer();
-    jsonfile.writeFile(file, obj, function (err) {
+    jsonfile.writeFile(filename, obj, function (err) {
         if (err) {
             deferred.fulfill(false);
         } else {
@@ -309,9 +309,9 @@ function writeJsonSpec() {
     return deferred.promise;
 }
 
-function readJsonSpec() {
+function readJsonSpec(filename) {
     var deferred = protractor.promise.defer();
-    jsonfile.readFile(file, function(err, obj) {
+    jsonfile.readFile(filename, function(err, obj) {
         if (err) {
             deferred.fulfill(false);
         } else {
