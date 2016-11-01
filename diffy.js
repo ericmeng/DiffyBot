@@ -71,7 +71,7 @@ function Diffy (config, mode) {
         var testDir = config.testDir + testSuiteName;
         var diffDir = config.diffDir + testSuiteName;
         var specFilePath = specDir + '/' + testCaseName + '.png';
-        var jsonSpecPath = sepcDir + '/' + testCaseName + '.json';
+        var jsonSpecPath = specDir + '/' + testCaseName + '.json';
         var testFilePath = testDir + '/' + testCaseName + '.png';
         var pngDiffFilePath = diffDir + '/' + testCaseName + '.png';
 
