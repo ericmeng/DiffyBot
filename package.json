@@ -28,6 +28,7 @@
   "dependencies": {
     "blink-diff": "^1.0.12",
     "fs": "0.0.2",
+    "jsonfile": "^2.4.0",
     "mkdirp": "^0.5.1",
     "sharp": "^0.16.2",
     "shelljs": "^0.7.0",

@@ -7,6 +7,7 @@ var shell = require('shelljs');
 var BlinkDiff = require('blink-diff');
 var sleep = require('sleep-promise');
 var sharp = require('sharp');
+var jsonfile = require('jsonfile')
 
 // constructor
 function Diffy (config, mode) {
@@ -70,6 +71,7 @@ function Diffy (config, mode) {
         var testDir = config.testDir + testSuiteName;
         var diffDir = config.diffDir + testSuiteName;
         var specFilePath = specDir + '/' + testCaseName + '.png';
+        var jsonSpecPath = sepcDir + '/' + testCaseName + '.json';
         var testFilePath = testDir + '/' + testCaseName + '.png';
         var pngDiffFilePath = diffDir + '/' + testCaseName + '.png';
 
@@ -81,6 +83,13 @@ function Diffy (config, mode) {
                     })
                     .then(function (png) {
                         return writeScreenShot(png, specFilePath, targetScreenWidth, targetScreenHeight);
+                    })
+                    .then(findBlockoutByClasses)
+                    .then(function (blockOut) {
+                        var jsonSpec = {
+                            blockOut
+                        };
+                        return writeJsonSpec(jsonSpecPath, jsonSpec);
                     });
             }
             case 'regression': {
@@ -95,6 +104,13 @@ function Diffy (config, mode) {
                         return writeScreenShot(png, testFilePath, targetScreenWidth, targetScreenHeight);
                     })
                     .then(findBlockoutByClasses)
+                    .then(function (blockOut) {
+                        return readJsonSpec(jsonSpecPath)
+                        .then((jsonSpec) => {
+                            let specBlockOut = jsonSpec.blockOut;
+                            return specBlockOut.concat(blockOut);
+                        });
+                    })
                     .then(function (blockOut) {
                         return pdiff(specFilePath, testFilePath, pngDiffFilePath, blockOut);
                     });
@@ -277,6 +293,31 @@ function writeScreenShot(data, filename, width, height) {
         }
     });
 
+    return deferred.promise;
+}
+
+// promised call
+function writeJsonSpec() {
+    var deferred = protractor.promise.defer();
+    jsonfile.writeFile(file, obj, function (err) {
+        if (err) {
+            deferred.fulfill(false);
+        } else {
+            deferred.fulfill(true);
+        }
+    })
+    return deferred.promise;
+}
+
+function readJsonSpec() {
+    var deferred = protractor.promise.defer();
+    jsonfile.readFile(file, function(err, obj) {
+        if (err) {
+            deferred.fulfill(false);
+        } else {
+            deferred.fulfill(true);
+        }
+    })
     return deferred.promise;
 }
 
