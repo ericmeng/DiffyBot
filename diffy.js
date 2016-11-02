@@ -25,7 +25,11 @@ function Diffy (config, mode) {
     var targetScreenWidth = config.screenWidth;
     var targetScreenHeight = config.screenHeight;
     var delay = config.delay;
-    var ignoreByCss = config.ignoreByCss || [];
+    var ignoreByCss = [];
+
+    this.setIgnoreByCss = function (list) {
+        ignoreByCss = list;
+    }
 
     this.standarizeScreenSize = function () {
 
@@ -279,7 +283,6 @@ function getBrowserOffset () {
 // promised call
 function writeScreenShot(data, filename, width, height) {
     var deferred = protractor.promise.defer();
-    var stream = fs.createWriteStream(filename);
     var buffer = new Buffer(data, 'base64');
 
     sharp(buffer)
