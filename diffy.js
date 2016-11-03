@@ -25,6 +25,7 @@ function Diffy (config, mode) {
     var targetScreenWidth = config.screenWidth;
     var targetScreenHeight = config.screenHeight;
     var delay = config.delay;
+
     var ignoreByCss = [];
 
     this.setIgnoreByCss = function (list) {
@@ -220,7 +221,6 @@ function Diffy (config, mode) {
         for (var j = 0; j < elements.length; ++j) {
           browser.executeScript("return arguments[0].getBoundingClientRect();", elements[j].getWebElement())
           .then(function (boundingClientRect) {
-              console.log(boundingClientRect);
               var b = {
                   x: boundingClientRect.left,
                   width: boundingClientRect.width,

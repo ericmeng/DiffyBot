@@ -14,7 +14,7 @@ https://help.github.com/articles/adding-a-new-ssh-key-to-your-github-account/
 ## Add Diffy to your package.json
 ```json
 "devDependencies": {
-  "diffy-bot": "git@github.com:LoyaltyOne/DiffyBot.git#0.1.2",
+  "diffy-bot": "git@github.com:LoyaltyOne/DiffyBot.git#0.1.3",
 }
 ```
 Note the protocol is not https. Git will use the ssh backend and your registered
@@ -79,3 +79,12 @@ In 'record' mode, screenshots will be saved in specDir/testSuiteName/testCaseNam
 In 'regression' mode, screenshots will be compared and any differences are saved in diffDir under the same structure.
 If test passes, the promise will be resolved to true, and false otherwise.
 Record mode always succeed unless there're other errors.
+
+## In some cases there may be dynamic content such as an advertisement block which you want to ignore. You can specify the content to be ignored before walkThroughPage
+```javascript
+//Same as the css locator rule, the following example ignores the elements of class=description that is nested under element of class=container1
+diffy.setIgnoreByCss(['.container1 .description'])
+
+//The following example ignores the element of class=description as well as element of class=container1
+diffy.setIgnoreByCss(['.container1', '.description'])
+```
