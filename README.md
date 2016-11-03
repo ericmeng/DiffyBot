@@ -33,8 +33,7 @@ var config = {
     testDir: pdiffTestRootDir + 'test/',    //screenshots of current test
     diffDir: pdiffTestRootDir + 'diff/',    //visual differences (if any)
     screenWidth: 1024,
-    screenHeight: 768,
-    ignoredClasses: ['animation', 'dynamic_content']
+    screenHeight: 768
 };
 ```
 
@@ -80,9 +79,9 @@ In 'regression' mode, screenshots will be compared and any differences are saved
 If test passes, the promise will be resolved to true, and false otherwise.
 Record mode always succeed unless there're other errors.
 
-## In some cases there may be dynamic content such as an advertisement block which you want to ignore. You can specify the content to be ignored before walkThroughPage
+## In some cases there may be dynamic content such as an advertisement block which you want to ignore. You can specify the content to be ignored for diff before walkThroughPage()
 ```javascript
-//Same as the css locator rule, the following example ignores the elements of class=description that is nested under element of class=container1
+//Same as the css locator rule, the following example ignores element of class=description that is nested under element of class=container1
 diffy.setIgnoreByCss(['.container1 .description'])
 
 //The following example ignores the element of class=description as well as element of class=container1
