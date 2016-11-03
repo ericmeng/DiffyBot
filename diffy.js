@@ -26,12 +26,6 @@ function Diffy (config, mode) {
     var targetScreenHeight = config.screenHeight;
     var delay = config.delay;
 
-    var ignoreByCss = [];
-
-    this.setIgnoreByCss = function (list) {
-        ignoreByCss = list;
-    }
-
     this.standarizeScreenSize = function () {
 
         var targetBrowserWidth;
@@ -64,14 +58,17 @@ function Diffy (config, mode) {
     };
 
     //record or compare screenshot at the current spot
-    this.recordScreenshotOrCheckRegression = function (testSuiteName, testCaseName) {
+    this.recordScreenshotOrCheckRegression = function (testSuiteName, testCaseName, ignoreByCss) {
         return browser.waitForAngular()
         .then(function () {
-            return reallyRecordScreenshotOrCheckRegression(testSuiteName, testCaseName);
+            return reallyRecordScreenshotOrCheckRegression(testSuiteName, testCaseName, ignoreByCss);
         });
     };
 
-    var reallyRecordScreenshotOrCheckRegression = function (testSuiteName, testCaseName) {
+    var reallyRecordScreenshotOrCheckRegression = function (testSuiteName, testCaseName, ignoreByCss) {
+        if (!ignoreByCss) {
+            ignoreByCss = [];
+        }
         var specDir = config.specDir + testSuiteName;
         var testDir = config.testDir + testSuiteName;
         var diffDir = config.diffDir + testSuiteName;
@@ -89,7 +86,7 @@ function Diffy (config, mode) {
                     .then(function (png) {
                         return writeScreenShot(png, specFilePath, targetScreenWidth, targetScreenHeight);
                     })
-                    .then(findBlockoutByClasses)
+                    .then(() => findBlockoutByClasses(ignoreByCss))
                     .then(function (blockOut) {
                         var jsonSpec = {
                             blockOut
@@ -108,7 +105,7 @@ function Diffy (config, mode) {
                     .then(function (png) {
                         return writeScreenShot(png, testFilePath, targetScreenWidth, targetScreenHeight);
                     })
-                    .then(findBlockoutByClasses)
+                    .then(() => findBlockoutByClasses(ignoreByCss))
                     .then(function (blockOut) {
                         return readJsonSpec(jsonSpecPath)
                         .then((jsonSpec) => {
@@ -127,14 +124,14 @@ function Diffy (config, mode) {
     };
 
     //walk through page, record or compare screenshots
-    this.walkThroughPage = function (testSuiteName, testCaseName) {
+    this.walkThroughPage = function (testSuiteName, testCaseName, ignoreByCss) {
         return browser.waitForAngular()
         .then(function () {
-            return reallyWalkThroughPage(testSuiteName, testCaseName);
+            return reallyWalkThroughPage(testSuiteName, testCaseName, ignoreByCss);
         });
     };
 
-    var reallyWalkThroughPage = function (testSuiteName, testCaseName) {
+    var reallyWalkThroughPage = function (testSuiteName, testCaseName, ignoreByCss) {
         var deferred = protractor.promise.defer();
         var browserHeight;
         var scrollByBrowserHeight;
@@ -144,7 +141,7 @@ function Diffy (config, mode) {
         var nothingFailed = true;
         function nextAction () {
             i++;
-            reallyRecordScreenshotOrCheckRegression(testSuiteName, testCaseName + '_' + i)
+            reallyRecordScreenshotOrCheckRegression(testSuiteName, testCaseName + '_' + i, ignoreByCss)
             .then(function (result) {
                 nothingFailed = nothingFailed && result;
                 //try scroll down
@@ -189,7 +186,7 @@ function Diffy (config, mode) {
         return deferred.promise;
     };
 
-    function findBlockoutByClasses() {
+    function findBlockoutByClasses(ignoreByCss) {
         var deferred = protractor.promise.defer();
         var blockOut = [];
         if (ignoreByCss.length === 0) {

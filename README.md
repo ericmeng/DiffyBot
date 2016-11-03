@@ -62,17 +62,22 @@ browser.get('/#/some/page');
 ## Then take screenshots of that page from top to bottom, record or compare them.
 ```javascript
 //promised call that resolves to true if no regression in the page, false otherwise
-diffy.walkThroughPage(testSuiteName, testCaseName);
+diffy.walkThroughPage(testSuiteName, testCaseName, ignoreByCss);
 ```
 In 'record' mode, screenshots will be saved in specDir/testSuiteName/testCaseName_[1,2,3... from top to botom].png
 In 'regression' mode, screenshots will be compared and any differences are saved in diffDir under the same structure.
 If all tests passes, the promise will be resolved to true, and false otherwise.
 Record mode always succeed unless there're other errors.
 
+'ignoreByCss' is an optional array of elements to be ignored in comparison described as css locator. For instance:
+['.container .offer'] matches all elements of class 'offer' if they're nested under 'container' class elements.
+['.container', '.offer'] matches all 'container' classes as well as 'offer' classes.
+['.container.offer'] matches all elements that is both a 'container' class and an 'offer' class.
+
 ## Or you may ask diffy to take a single screenshot of the current screen, record or compare it.
 ```javascript
 //promised call that resolves to true if no regression in current screen, false otherwise
-diffy.recordScreenshotOrCheckRegression(testSuiteName, testCaseName);
+diffy.recordScreenshotOrCheckRegression(testSuiteName, testCaseName, ignoreByCss);
 ```
 In 'record' mode, screenshots will be saved in specDir/testSuiteName/testCaseName.png
 In 'regression' mode, screenshots will be compared and any differences are saved in diffDir under the same structure.
