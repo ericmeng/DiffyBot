@@ -86,7 +86,9 @@ function Diffy (config, mode) {
                     .then(function (png) {
                         return writeScreenShot(png, specFilePath, targetScreenWidth, targetScreenHeight);
                     })
-                    .then(() => findBlockoutByClasses(ignoreByCss))
+                    .then(function () {
+                        return findBlockoutByClasses(ignoreByCss);
+                    })
                     .then(function (blockOut) {
                         var jsonSpec = {
                             blockOut
@@ -105,7 +107,9 @@ function Diffy (config, mode) {
                     .then(function (png) {
                         return writeScreenShot(png, testFilePath, targetScreenWidth, targetScreenHeight);
                     })
-                    .then(() => findBlockoutByClasses(ignoreByCss))
+                    .then(function () {
+                        return findBlockoutByClasses(ignoreByCss);
+                    })
                     .then(function (blockOut) {
                         return readJsonSpec(jsonSpecPath)
                         .then((jsonSpec) => {
